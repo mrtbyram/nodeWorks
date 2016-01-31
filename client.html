@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/base/jquery-1.11.1.js"></script>
+  <script>
+    var socket = io();
+
+    $( document ).ready(function() {
+      
+      $('#j').click(function(){
+        socket.emit('username', $('#username').val());
+        $('#f').append('<h1>' + $('#username').val() + '</h1>');
+        $('#username').hide();
+        $('#j').hide();
+      })
+
+      $('#m').click(function(){
+        var d = {
+          toUser : $('#s').val(),
+          msg : $('#message').val()
+        };
+        socket.emit('messageServer', d);
+        $('#message').val('');
+      });
+
+      $('#message').keydown(function (e) {
+        if (e.keyCode == 13) {
+          $('#m').click();
+        }
+      });
+    })
+
+    socket.on('user connected', function(data){
+      $('#s').append(new Option(data, data));
+    });
+
+    socket.on('messageClient', function(data){
+      $('#board').append('<p>' + data + '</p>');
+    });    
+
+  </script>
+  <head>
+    <title>Demo</title>
+  </head>
+  <body>
+    <!-- <form action="#"> -->
+      <div id="f">
+        <input id="username" autocomplete="off" /><button id="j">Join</button>
+      </div>
+
+        <input id="message" autocomplete="off" /><button id="m">Send</button>
+
+
+      Users:
+      <select id="s">
+      </select>
+
+      <div id="board">
+          
+      </div>     
+    <!-- </form> -->
+  </body>
+</html>
