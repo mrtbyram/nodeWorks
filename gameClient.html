@@ -52,6 +52,7 @@
           if (locationY == -10) locationY = 710;
 
           $('#'+myUser).offset({top: locationY, left: locationX});
+          socket.emit('movement', {username: myUser, top: locationY, left:locationX});
 
         }, speed);
     }
@@ -67,6 +68,12 @@
     socket.on('full', function(data){
       $('#board').append('<h1>ROOM IS FULL</h1>');
     });
+
+    socket.on('newUser', function(data){
+      $('#board').append('<div id='+data.username+' class=circle></div>');
+      $('#'+data.username).css('background', data.color);
+      $('#'+data.username).offset({top: 0, left: 0});
+    })
   </script>
   <head>
     <link rel="stylesheet" type="text/css" href="/base/gameCss.css">

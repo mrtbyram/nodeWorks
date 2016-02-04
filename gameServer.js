@@ -23,7 +23,14 @@ io.on('connection', function(socket){
 
 		console.log(username + ' connected');
 		socket.emit('initial', {username: username, color:color});
+
+		socket.broadcast.emit('newUser', {username: username, color:color});
 	}
+
+	socket.on('movement', function(data){
+		// console.log('username:'+data.username+' X:'+data.left+' Y:'+data.top);
+		
+	})
 });
 
 http.listen(3000, function(){
