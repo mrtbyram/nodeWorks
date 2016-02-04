@@ -9,7 +9,7 @@
       
       $('#j').click(function(){
         socket.emit('username', $('#username').val());
-        $('#f').append('<h1>' + $('#username').val() + '</h1>');
+        $('#loginPanel').append('<h1>' + $('#username').val() + '</h1>');
         $('#username').hide();
         $('#j').hide();
       })
@@ -44,7 +44,7 @@
   </head>
   <body>
     <!-- <form action="#"> -->
-      <div id="f">
+      <div id="loginPanel">
         <input id="username" autocomplete="off" /><button id="j">Join</button>
       </div>
 
