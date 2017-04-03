@@ -29,7 +29,7 @@ io.on('connection', function(socket){
 
 	socket.on('movement', function(data){
 		// console.log('username:'+data.username+' X:'+data.left+' Y:'+data.top);
-		
+		socket.broadcast.emit('otherMovement', data);
 	})
 });
 

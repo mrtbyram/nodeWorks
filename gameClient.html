@@ -10,10 +10,12 @@
 
     var direction = 'right';
 
-    var distance = 1;
-    var speed = 5;
+    var distance = 5;
+    var speed = 30;
 
     var myUser;
+    var myColor;
+    var otherUsers=[];
 
     $( document ).ready(function() {
       
@@ -52,28 +54,46 @@
           if (locationY == -10) locationY = 710;
 
           $('#'+myUser).offset({top: locationY, left: locationX});
-          socket.emit('movement', {username: myUser, top: locationY, left:locationX});
+          socket.emit('movement', {username: myUser, top: locationY, left:locationX, color: myColor});
 
         }, speed);
     }
 
     socket.on('initial', function(data){
-      myUser = data.username;
-      $('#board').append('<div id='+myUser+' class=circle></div>');
-      $('#'+myUser).css('background', data.color);
-      $('#'+myUser).offset({top: locationY, left: locationX});
-      driver();
+      drawCircle(data, 0, 0, true);
     });
+
+    socket.on('newUser', function(data){
+      drawCircle(data, 0, 0);
+    })
+
+    socket.on('otherMovement', function(data){
+      if(otherUsers.indexOf(data.username) == -1){
+        //new user
+        drawCircle(data, data.left, data.top);
+        otherUsers.push(data.username);
+        console.log('joined');
+      }
+
+      $('#'+data.username).offset({top: data.top, left: data.left});
+    })
 
     socket.on('full', function(data){
       $('#board').append('<h1>ROOM IS FULL</h1>');
     });
 
-    socket.on('newUser', function(data){
+    function drawCircle(data, locX, locY, mine){
       $('#board').append('<div id='+data.username+' class=circle></div>');
       $('#'+data.username).css('background', data.color);
-      $('#'+data.username).offset({top: 0, left: 0});
-    })
+      $('#'+data.username).offset({top: locY, left: locX});
+
+      if(mine){
+        myUser = data.username;
+        myColor = data.color;
+        driver();
+      }
+    }
+
   </script>
   <head>
     <link rel="stylesheet" type="text/css" href="/base/gameCss.css">
