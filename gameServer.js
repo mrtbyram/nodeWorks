@@ -2,11 +2,12 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var path = require('path');
 
-app.use('/base', express.static('/Users/muratbayram/git/nodeWorks'));
+app.use('/base', express.static('./'));
 
 app.get('/', function(req, res){
-  res.sendFile('/Users/muratbayram/git/nodeWorks/gameClient.html');
+  res.sendFile(path.resolve('gameClient.html'));
 });
 
 var userMap = {};
